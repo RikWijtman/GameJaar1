@@ -1,9 +1,39 @@
 import { ImageSource, Sound, Resource, Loader } from 'excalibur'
-import fishImage from '../images/fish.png'
+import pidgeonImage from '../images/Duif.png'
+import TowerImage from '../images/Pistoolman.png'
+import BulletImage from '../images/Kogel.png'
+import BackgroundImage from '../images/Map1.png'
+import BuyPistoolmanImage from '../images/BuyPistoolman.png'
+import RangeImage from '../images/Range.png'
+import MoneyImage from '../images/Money.png'
+import AreaImage from '../images/areaDenied.png'
+import JagerImage from '../images/Jager.png'
+import BuyJagerImage from '../images/BuyJager.png'
+import SniperImage from '../images/Sniper.png'
+import BuySniperImage from '../images/BuySniper.png'
+import SniperImageA from '../images/SniperA.png'
+import JagerImageA from '../images/JagerA.png'
+import TowerImageA from '../images/PistoolmanA.png'
+import HpImage from '../images/Hp.png'
 
 const Resources = {
-    Fish: new ImageSource(fishImage)
+    Pidgeon: new ImageSource(pidgeonImage),
+    Tower: new ImageSource(TowerImage),
+    Bullet: new ImageSource(BulletImage),
+    Background: new ImageSource(BackgroundImage),
+    BuyPistoolman: new ImageSource(BuyPistoolmanImage),
+    Range: new ImageSource(RangeImage),
+    Money: new ImageSource(MoneyImage),
+    Area: new ImageSource(AreaImage),
+    Jager: new ImageSource(JagerImage),
+    BuyJager: new ImageSource(BuyJagerImage),
+    Sniper: new ImageSource(SniperImage),
+    BuySniper: new ImageSource(BuySniperImage),
+    SniperA: new ImageSource(SniperImageA),
+    JagerA: new ImageSource(JagerImageA),
+    PistoolmanA: new ImageSource(TowerImageA),
+    Hp: new ImageSource(HpImage),
 }
-const ResourceLoader = new Loader([Resources.Fish])
+const ResourceLoader = new Loader([Resources.Pidgeon, Resources.Tower, Resources.Bullet, Resources.Background, Resources.BuyPistoolman, Resources.Range, Resources.Money, Resources.Area, Resources.Jager, Resources.BuyJager, Resources.BuySniper, Resources.Sniper, Resources.JagerA, Resources.SniperA, Resources.PistoolmanA, Resources.Hp])
 
 export { Resources, ResourceLoader }
