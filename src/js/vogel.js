@@ -6,10 +6,15 @@ import { Bullet } from './kugel'
 export class Pidgeon extends Actor {
 
     hp = 5
+    maxHp
     speed = 50
     timer
     spawnTimer = 0
     game
+    camo = false
+    vliegduif = false
+    image = Resources.Pidgeon.toSprite()
+    originalImage = Resources.Pidgeon.toSprite()
 
     constructor(game) {
         super({width:Resources.Pidgeon.width/1.6, height:Resources.Pidgeon.height/3})
@@ -17,7 +22,8 @@ export class Pidgeon extends Actor {
     }
 
     onInitialize(engine) {
-        this.graphics.use(Resources.Pidgeon.toSprite())
+        this.maxHp = this.hp
+        this.graphics.use(this.image)
         this.pos = new Vector(120, 0)
         this.scale = new Vector(0.15, 0.15)
         this.rotation = 1.5
@@ -34,6 +40,9 @@ export class Pidgeon extends Actor {
 
         this.on('collisionstart', (event) => {
         if (event.other instanceof Bullet) {
+            if (this.camo && !event.other.camo) {
+                return
+            }
             this.hp -= event.other.damage
             this.Flash()
             event.other.kill()
@@ -42,6 +51,10 @@ export class Pidgeon extends Actor {
     }
 
     onPreUpdate(){
+        if (this.vliegduif && this.hp <= this.maxHp/2) {
+            this.image = this.originalImage
+            this.graphics.use(this.image)
+        }
         if (this.hp <= 0) {
             this.kill()
         }

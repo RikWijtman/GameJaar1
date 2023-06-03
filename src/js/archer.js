@@ -4,11 +4,11 @@ import {Resources} from "./resources.js"
 import { Bullet } from './kugel'
 import {Towerparent} from "./towerparent.js"
 
-export class Tower extends Towerparent {
-    range = 240
-    firingRate = 50
+export class Archer extends Towerparent {
+    range = 340
+    firingRate = 75
     bulletType = Bullet
-    firingSpeed = 700
+    firingSpeed = 800
     damage = 1
-    tower = Resources.Tower
+    tower = Resources.Archer
 } 

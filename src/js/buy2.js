@@ -1,13 +1,12 @@
 import { Actor, Vector } from "excalibur"
 import * as ex from 'excalibur'
 import {Resources} from "./resources.js"
-import { Placeholder2 } from './placeholderjager.js'
 
 
 export class Buy2 extends Actor {
 
     game
-    cost = 400
+    cost = 350
 
     constructor(game) {
         super({width:Resources.BuyPistoolman.width/2, height:Resources.BuyPistoolman.height})
@@ -18,11 +17,7 @@ export class Buy2 extends Actor {
     }
 
     onInitialize(engine) {
-        this.on('pointerdown', (event) => {
-            const placeholder = new Placeholder2()
-            engine.currentScene.add(placeholder)
-            this.game.buyTower(this.cost)
-        })
+        this.on('pointerdown', (event) => this.game.placeholderHandler(this.cost, 2))
     }
 
     _postupdate() {

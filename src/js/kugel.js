@@ -7,14 +7,16 @@ export class Bullet extends Actor {
     pidgeon
     damage
     speed
+    camo
 
-    constructor(tower,bird,damage,speed) {
+    constructor(tower,bird,damage,speed,camo) {
         super({width:Resources.Bullet.width/10, height:Resources.Bullet.height/20})
         this.pos = new Vector(tower.pos.x,tower.pos.y)
         this.graphics.use(Resources.Bullet.toSprite())
         this.pidgeon = bird
         this.damage = damage
         this.speed = speed
+        this.camo = camo
         this.scale = new Vector(0.2, 0.2)
     }
 
