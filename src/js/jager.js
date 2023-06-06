@@ -16,12 +16,13 @@ export class Jager extends Towerparent {
     tower = Resources.Jager
     camoDetection = false
     name = 'Hunter'
-    upgradeCost = 550
+    upgradeCost = 420
     sellWorth = 263
     abilityButton
+    upgradeTag = 'Keen eye'
 
     levelUp2(engine) {
-        this.upgradeCost = 1600
+        this.upgradeCost = 1400
         this.camoDetection = true
 
         this.range = 450
@@ -30,20 +31,18 @@ export class Jager extends Towerparent {
         engine.currentScene.add(this.myRange) 
         this.myRange.on('precollision', (event) => {
             if (event.other instanceof Pidgeon) {
-                this.target = event.other
-
-                if (this.timer > this.firingRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0)
-                    engine.currentScene.add(bullet)
-        
-                    this.timer = 0
+                if (this.target == 'T') {
+                    this.target = event.other
                 }
-
-                
+                if (event.other.far > this.target.far) {
+                    this.target = event.other
+                }
             }
         })
 
-        this.sellWorth = 676
+        this.upgradeTag = 'Little budy'
+
+        this.sellWorth = 578
     }
 
     levelUp3(engine) {
@@ -56,24 +55,17 @@ export class Jager extends Towerparent {
         engine.currentScene.add(this.myRange) 
         this.myRange.on('precollision', (event) => {
             if (event.other instanceof Pidgeon) {
-                this.target = event.other
-
-                if (this.timer > this.firingRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0)
-                    engine.currentScene.add(bullet)
-        
-                    this.timer = 0
+                if (this.target == 'T') {
+                    this.target = event.other
                 }
-
-                if (this.hawkTimer > this.hawkFiringRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const hawk = new Hawk(this, event.other,3,300,true,Infinity,0)
-                    engine.currentScene.add(hawk)
-        
-                    this.hawkTimer = 0
+                if (event.other.far > this.target.far) {
+                    this.target = event.other
                 }
             }
         })
+        this.upgradeTag = ''
 
-        this.sellWorth = 1300
+        this.sellWorth = 1628
+        this.tower = Resources.Jager2
     }
 } 

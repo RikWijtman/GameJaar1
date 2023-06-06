@@ -2,7 +2,6 @@ import '../css/style.css'
 import * as ex from 'excalibur'
 import { Actor, Engine, Vector, TextAlign, Scene } from "excalibur"
 import { Startbutton } from './startbutton'
-import { Logo } from './logo'
 
 export class Startscreen extends Scene {
 
@@ -12,7 +11,7 @@ export class Startscreen extends Scene {
     onInitialize(engine) {
         const button = new Startbutton()
         button.on('pointerdown', (event) => {
-            engine.goToScene('battlefield', engine)
+            engine.goToScene('battlefield')
         })
         this.add(button)
     }

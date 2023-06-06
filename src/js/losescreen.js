@@ -7,8 +7,8 @@ export class LoseScreen extends Actor {
     constructor() {
         super({width:Resources.LoseScreen.width, height:Resources.LoseScreen.height})
         this.graphics.use(Resources.LoseScreen.toSprite())
-        this.pos = new Vector(250,250)
-        this.scale = new Vector(200/512, 200/512)
+        this.pos = new Vector(356,256)
+        this.scale = new Vector(400/512, 400/512)
     }
 
     onInitialize() {

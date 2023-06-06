@@ -13,8 +13,9 @@ export class Bullet extends Actor {
     tower
     res = Resources.Bullet
     tB
+    titanDamage
 
-    constructor(tower,bird,damage,speed,camo,hp,offset,titanBoost) {
+    constructor(tower,bird,damage,speed,camo,hp,offset,titanBoost,titanDamage,bounce) {
         super({width:Resources.Bullet.width/10, height:Resources.Bullet.height/20})
         this.pos = new Vector(tower.pos.x,tower.pos.y)
         this.graphics.use(this.res.toSprite())
@@ -26,6 +27,8 @@ export class Bullet extends Actor {
         this.offset = offset
         this.tower = tower
         this.tB = titanBoost
+        this.bounce = bounce
+        this.titanDamage = titanDamage
         this.scale = new Vector(0.2, 0.2)
     }
 
@@ -45,7 +48,7 @@ export class Bullet extends Actor {
     }
 
     _preupdate() {
-        if (this.pos.y > 570 || this.bulletHp <= 0) {
+        if ((this.pos.y > 570 || this.pos.y > 570) || this.bulletHp <= 0) {
             this.kill()
         }
         

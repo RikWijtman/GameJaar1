@@ -18,36 +18,36 @@ export class Sniper extends Towerparent {
     sellWorth = 188
     upgradeCost = 400
     myRange
+    upgradeTag = 'Better scope'
 
     levelUp2(engine) {
-        this.upgradeCost = 1800
+        this.upgradeCost = 1600
 
-        this.range = 800
+        this.range = 1000
         this.myRange.kill()
         this.myRange = new Range(this.pos.x,this.pos.y,this.range) 
         engine.currentScene.add(this.myRange) 
         this.myRange.on('precollision', (event) => {
             if (event.other instanceof Pidgeon) {
-                this.target = event.other
-
-                if (this.timer > this.firingRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0)
-                    engine.currentScene.add(bullet)
-        
-                    this.timer = 0
+                if (this.target == 'T') {
+                    this.target = event.other
                 }
-
-                
+                if (event.other.far > this.target.far) {
+                    this.target = event.other
+                }
             }
         })
+        this.upgradeTag = 'Titan destroyer'
 
-        this.sellWorth = 938
+        this.sellWorth = 634
     }
 
     levelUp3() {
         this.damage = 4
         this.titanBoost = true
+        this.upgradeTag = ''
 
-        this.sellWorth = 1388
+        this.sellWorth = 1834
+        this.tower = Resources.Sniper2
     }
 } 

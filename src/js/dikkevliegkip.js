@@ -5,7 +5,7 @@ import {Pidgeon} from "./vogel.js"
 
 export class BlokVlieg extends Pidgeon {
     speed = 50
-    hp = 25
+    hp = 20
     vliegduif = true
     image = Resources.BlokVlieg.toSprite()
     originalImage = Resources.Blok.toSprite()

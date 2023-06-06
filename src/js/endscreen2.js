@@ -1,14 +1,14 @@
 import '../css/style.css'
 import * as ex from 'excalibur'
 import { Actor, Engine, Vector, TextAlign, Scene } from "excalibur"
-import { WinScreen } from './winscreen'
+import { LoseScreen } from './losescreen'
 
-export class Endscreen1 extends Scene {
+export class Endscreen2 extends Scene {
     constructor() {
         super({})
     }
     onInitialize(engine) {
-        const winscreen = new WinScreen()
-        this.add(winscreen)
+        const losescreen = new LoseScreen()
+        this.add(losescreen)
     }
 }

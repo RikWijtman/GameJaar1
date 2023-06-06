@@ -30,7 +30,7 @@ export class Battlefield extends Scene {
     tower
     pidgeon
     cashLabel
-    roekoes = 10000
+    roekoes = 1000
     waveTimer = 0
     waveTime = 0
     currentWave = 0
@@ -39,7 +39,6 @@ export class Battlefield extends Scene {
     baseHp = 100
     placeTower
     game
-    waveChecker
     tagName
     tagDamage
     tagSpeed
@@ -51,6 +50,7 @@ export class Battlefield extends Scene {
     sellCount
     pointertarget
     upgradeTimer = 0
+    bossStarted = false
 
     constructor(game) {
         super()
@@ -75,15 +75,18 @@ export class Battlefield extends Scene {
         const hp = new Hp()
         this.add(hp)
         
-        this.waveChecker = new Range(256,256,512)
-        this.waveChecker.on('precollision', (event) => {
-            if (event.other instanceof Pidgeon) {
-                //console.log('pipi');
-                return
+        const waveChecker = new Range(256,256,1024)
+        waveChecker.on('precollision', (event) => {
+            if (this.bossStarted) {
+                if (event.other instanceof TitaanVogel) {
+                    console.log('papa');
+                    this.titanFound = true
+                    return
+                }
+                console.log('pipi')
             }
-            //console.log('kaas');
         })
-        this.add(this.waveChecker)
+        this.add(waveChecker)
 
         this.cashLabel = new ex.Label({
             text: 'cash',
@@ -116,17 +119,22 @@ export class Battlefield extends Scene {
         });
         this.add(this.waveLabel)
 
-        this.Wave15()
+        this.Wave1()
         this.placeAreas()
     }
 
     onPostUpdate() {
         this.upgradeTimer++
         if (this.baseHp <= 0) {
-            console.log('you lost');
+            this.game.goToScene('endscreenlose')
         }
         this.waveTimer++
         this.waveTime--
+
+        if (!this.titanFound && this.bossStarted) {
+            this.game.goToScene('endscreenwin')
+        }
+        this.titanFound = false
 
         switch(this.currentWave) {
             case 0:
@@ -302,11 +310,9 @@ export class Battlefield extends Scene {
                     this.enemiesSpawned++
                 }else if (this.waveTimer > 120 && this.enemiesSpawned != this.enemyAmount) {
                     this.add(new TitaanVogel(this))
+                    this.bossStarted = true
                     this.waveTimer = 0
                     this.enemiesSpawned++
-                }
-                if (this.waveTime <= 0) {
-                    console.log('you won');
                 }
                 break
         }
@@ -397,7 +403,7 @@ export class Battlefield extends Scene {
     cancelplacing() {
         this.placeTower = false
     }
-    upgradeHandler(name,dam,spd,range,cost,char,sellW) {
+    upgradeHandler(name,dam,spd,range,cost,char,sellW,upgradeTag) {
         this.pointerTarget = char
         if (!this.tagExists) {
             this.tagName = new ex.Label({
@@ -444,6 +450,17 @@ export class Battlefield extends Scene {
             })
             this.add(this.tagRange)
 
+            this.tagUpgrade = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 260),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagUpgrade)
+
             this.tagCost = new ex.Label({
                 text: 'Pistoolman',
                 pos: ex.vec(600, 290),
@@ -475,14 +492,16 @@ export class Battlefield extends Scene {
             this.tagExists = true
         }
 
-        this.setText(name,dam,range,spd,cost,sellW)
+        this.setText(name,dam,range,spd,cost,sellW,upgradeTag)
     }
-    setText(name,dam,range,spd,cost,sellC) {
+    setText(name,dam,range,spd,cost,sellC,upgradeTag) {
         this.cost = cost
         this.tagName.text = name + ''
         this.tagDamage.text = dam + ' damage'
         this.tagSpeed.text = Math.round(spd * 10, 2) / 10 + ' attackspeed'
         this.tagRange.text = range + ' range'
+        this.tagRange.text = range + ' range'
+        this.tagUpgrade.text = upgradeTag + ''
         this.tagCost.text = cost + ' roekoes'
         this.tagSell.text = sellC + ' roekoes'
         if (this.pointerTarget.level > 2) {
@@ -508,7 +527,7 @@ export class Battlefield extends Scene {
             this.tagExists = false
         })
         this.upgButton.on('pointerdown', (event) => {
-            if (this.pointerTarget.level < 3 && this.roekoes >= cost && this.upgradeTimer > 2) {
+            if (this.pointerTarget.level < 3 && this.roekoes >= cost && this.upgradeTimer > 10) {
                 this.pointerTarget.level += 1
                 this.pointerTarget.levelUp()
                 this.upgradeBuyHandler()
@@ -519,7 +538,9 @@ export class Battlefield extends Scene {
         })
     }
     upgradeBuyHandler() {
-        this.roekoes -= this.cost
+        if (this.roekoes >= this.cost) {
+            this.roekoes -= this.cost
+        }
     }
 
     Wave1() {
@@ -531,84 +552,84 @@ export class Battlefield extends Scene {
     Wave2() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 80
+        this.roekoes += 120
         this.currentWave = 2
         this.enemyAmount = 10
     }
     Wave3() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 110
+        this.roekoes += 120
         this.currentWave = 3
         this.enemyAmount = 10
     }
     Wave4() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 120
+        this.roekoes += 140
         this.currentWave = 4
         this.enemyAmount = 6
     }
     Wave5() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 145
+        this.roekoes += 160
         this.currentWave = 5
         this.enemyAmount = 6
     }
     Wave6() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 150
+        this.roekoes += 160
         this.currentWave = 6
         this.enemyAmount = 6
     }
     Wave7() {
         this.enemiesSpawned = 0
-        this.waveTime = 1400
-        this.roekoes += 150
+        this.waveTime = 1600
+        this.roekoes += 180
         this.currentWave = 7
         this.enemyAmount = 8
     }
     Wave8() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 120
+        this.roekoes += 160
         this.currentWave = 8
         this.enemyAmount = 3
     }
     Wave9() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 180
+        this.roekoes += 200
         this.currentWave = 9
         this.enemyAmount = 12
     }
     Wave10() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 150
+        this.roekoes += 220
         this.currentWave = 10
         this.enemyAmount = 6
     }
     Wave11() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 180
+        this.roekoes += 200
         this.currentWave = 11
         this.enemyAmount = 6
     }
     Wave12() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 200
+        this.roekoes += 230
         this.currentWave = 12
         this.enemyAmount = 8
     }
     Wave13() {
         this.enemiesSpawned = 0
         this.waveTime = 1000
-        this.roekoes += 210
+        this.roekoes += 220
         this.currentWave = 13
         this.enemyAmount = 18
     }
@@ -622,7 +643,7 @@ export class Battlefield extends Scene {
     Wave15() {
         this.enemiesSpawned = 0
         this.waveTime = 2500
-        this.roekoes += 180
+        this.roekoes += 280
         this.currentWave = 15
         this.enemyAmount = 4
     }

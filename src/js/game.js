@@ -2,9 +2,14 @@ import { Battlefield } from "./battlefield"
 import { Startscreen } from "./startscreen"
 import { Actor, Engine, Vector, TextAlign, Scene } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { Endscreen } from "./endscreen"
+import { Endscreen1 } from "./endscreen"
+import { Endscreen2 } from "./endscreen2"
 
 export class Game extends Engine {
+    startscherm
+    Battlefield
+    endschermWin
+    endschermLose
     constructor() {
         super({ width: 776, height: 676 }) 
         this.start(ResourceLoader).then(() => this.startGame())
@@ -12,26 +17,18 @@ export class Game extends Engine {
         //this.debug.transform.showAll = true
     }
     startGame() {  
-        this.addScene('battlefield', new Battlefield())  
-        this.addScene('startscreen', new Startscreen())  
-        this.addScene('endscreen', new Endscreen())  
-        this.goToScene('startscreen', this)
+        this.startscherm = new Startscreen()
+        this.battlefield = new Battlefield(this)
+        this.endschermWin = new Endscreen1()
+        this.endschermLose = new Endscreen2()
+
+        this.addScene('battlefield', this.battlefield)  
+        this.addScene('startscreen', this.startscherm)  
+        this.addScene('endscreenwin', this.endschermWin) 
+        this.addScene('endscreenlose', this.endschermLose) 
+
+        this.goToScene('startscreen')
     }
 }
 
 new Game()
-
-/*
-todo:
-targetten fixen
-upgrades en sellen
-rounds fixen
-menus fixen
-
-muziek?
-
-meer maps
-meer towers
-meer enemies
-gamemodes
-*/

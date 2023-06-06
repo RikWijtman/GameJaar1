@@ -11,7 +11,7 @@ export class Towerparent extends Actor {
 
     timer = 0
     myRange
-    target = ''
+    target = 'T'
     range = 240
     firingRate = 50
     bulletType = Bullet
@@ -26,13 +26,15 @@ export class Towerparent extends Actor {
     myArea
     level = 1
     sellWorth
-    splitfire = false
     engine
-    hawkAttack = false
     hawkTimer = 0
     hawkFiringRate = 300
+    titanDamage = this.damage
+    hawkAway = 0
+    upgradeTag = ''
     titanBoost = false
-    titanDamage
+    hawkAttack = false
+    splitfire = false
 
     constructor(x, y, game) {
         super({width:Resources.Tower.width/2, height:Resources.Tower.height/2})
@@ -43,13 +45,14 @@ export class Towerparent extends Actor {
     }
 
     onInitialize(engine) {
+
         this.engine = engine
         this.graphics.use(this.tower.toSprite())
         this.myRange = new Range(this.pos.x,this.pos.y,this.range) 
         engine.currentScene.add(this.myRange) 
         
         this.on('pointerdown', (event) => {
-            this.game.upgradeHandler(this.name,this.damage, this.firingRate/60,this.range,this.upgradeCost,this,this.sellWorth)
+            this.game.upgradeHandler(this.name,this.damage, this.firingRate/60,this.range,this.upgradeCost,this,this.sellWorth, this.upgradeTag)
         })
 
         this.myArea = new AreaChar(this.pos.x,this.pos.y,80,80)
@@ -57,29 +60,23 @@ export class Towerparent extends Actor {
 
         this.myRange.on('precollision', (event) => {
             if (event.other instanceof Pidgeon) {
-                this.target = event.other
-
-                if (this.timer > this.firingRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0,this.titanBoost)
-                    engine.currentScene.add(bullet)
-        
-                    this.timer = 0
-
-                    if (this.splitfire) {
-                        const bullet2 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,1,this.titanBoost)
-                        engine.currentScene.add(bullet2)
-
-                        const bullet3 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,-1,this.titanBoost)
-                        engine.currentScene.add(bullet3)
-                    }
+                if (event.other.camo && !this.camoDetection) {
+                    return
                 }
-
-                
+                if (this.target == 'T') {
+                    this.target = event.other
+                }
+                if (event.other.far > this.target.far) {
+                    this.target = event.other
+                }
             }
         })
     }    
 
     onPreUpdate(engine) {
+        if (this.target.hp <= 0) {
+            this.target = 'T'
+        }
         if (!this.titanBoost) {
             this.titanDamage = this.damage
         }else{
@@ -87,10 +84,18 @@ export class Towerparent extends Actor {
         }
         this.timer++
         if (this.hawkAttack) {
+            this.hawkAway++
             this.hawkTimer++
+            if (this.hawkTimer > this.hawkFiringRate) {
+                this.tower = Resources.Jager
+                this.hawkAway = 0
+            }
+            if (this.hawkAway > 280) {
+                this.tower = Resources.Jager2
+            }
         }
         
-        if (this.target != '' && (!this.target.camo || (this.target.camo && this.camoDetection))) {
+        if (this.target != 'T' && (!this.target.camo || (this.target.camo && this.camoDetection))) {
             let multiplier
             let dy = this.pos.y - this.target.pos.y
             let dx = this.pos.x - this.target.pos.x
@@ -104,7 +109,28 @@ export class Towerparent extends Actor {
                 multiplier = Math.PI
             }  
 
-            this.actions.rotateTo(theta+(multiplier), 6, ex.RotationType.ShortestPath);
+            this.actions.rotateTo(theta+(multiplier), 20, ex.RotationType.ShortestPath);
+
+            if (this.timer > this.firingRate && (!this.target.camo || (this.target.camo && this.camoDetection))) {
+                const bullet = new this.bulletType(this, this.target,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0,this.titanBoost,this.titanDamage,this.bouncingShot)
+                engine.currentScene.add(bullet)
+    
+                this.timer = 0
+
+                if (this.splitfire) {
+                    const bullet2 = new this.bulletType(this, this.target,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,1,this.titanBoost,this.titanDamage)
+                    engine.currentScene.add(bullet2)
+
+                    const bullet3 = new this.bulletType(this, this.target,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,-1,this.titanBoost,this.titanDamage)
+                    engine.currentScene.add(bullet3)
+                }
+            }
+            if (this.hawkTimer > this.hawkFiringRate && (!this.target.camo || (this.target.camo && this.camoDetection))) {
+                const hawk = new Hawk(this, this.target,3,300,true,Infinity,0,false,5)
+                engine.currentScene.add(hawk)
+    
+                this.hawkTimer = 0
+            }
         }
         this.graphics.use(this.tower.toSprite())
     }
@@ -123,7 +149,7 @@ export class Towerparent extends Actor {
     }
 
     upgradeHandler() {
-        this.game.upgradeHandler(this.name,this.damage, this.firingRate/60,this.range,this.upgradeCost,this,this.sellWorth)
+        this.game.upgradeHandler(this.name,this.damage, this.firingRate/60,this.range,this.upgradeCost,this,this.sellWorth,this.upgradeTag)
     }
     resetDamage() {
 

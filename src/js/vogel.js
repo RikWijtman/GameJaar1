@@ -16,6 +16,7 @@ export class Pidgeon extends Actor {
     image = Resources.Pidgeon.toSprite()
     originalImage = Resources.Pidgeon.toSprite()
     titan = false
+    far = 0
 
     constructor(game) {
         super({width:Resources.Pidgeon.width/1.6, height:Resources.Pidgeon.height/3})
@@ -57,7 +58,6 @@ export class Pidgeon extends Actor {
     }
 
     onPreUpdate(){
-        console.log(this.hp)
         if (this.vliegduif && this.hp <= this.maxHp/2) {
             this.image = this.originalImage
             this.graphics.use(this.image)
@@ -69,9 +69,10 @@ export class Pidgeon extends Actor {
     }
 
     onPostUpdate(){
+        this.far += this.speed
         if (this.pos.y > 550) {
-            this.kill()
             this.game.takeDamage(this.hp)
+            this.hp = 0
         }
 
         //
