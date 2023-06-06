@@ -31,6 +31,8 @@ export class Towerparent extends Actor {
     hawkAttack = false
     hawkTimer = 0
     hawkFiringRate = 300
+    titanBoost = false
+    titanDamage
 
     constructor(x, y, game) {
         super({width:Resources.Tower.width/2, height:Resources.Tower.height/2})
@@ -58,16 +60,16 @@ export class Towerparent extends Actor {
                 this.target = event.other
 
                 if (this.timer > this.firingRate && (!event.other.camo || (event.other.camo && this.camoDetection))) {
-                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0)
+                    const bullet = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,0,this.titanBoost)
                     engine.currentScene.add(bullet)
         
                     this.timer = 0
 
                     if (this.splitfire) {
-                        const bullet2 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,1)
+                        const bullet2 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,1,this.titanBoost)
                         engine.currentScene.add(bullet2)
 
-                        const bullet3 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,-1)
+                        const bullet3 = new this.bulletType(this, event.other,this.damage,this.firingSpeed,this.camoDetection,this.bulletPierce,-1,this.titanBoost)
                         engine.currentScene.add(bullet3)
                     }
                 }
@@ -78,6 +80,11 @@ export class Towerparent extends Actor {
     }    
 
     onPreUpdate(engine) {
+        if (!this.titanBoost) {
+            this.titanDamage = this.damage
+        }else{
+            this.titanDamage = this.damage*2
+        }
         this.timer++
         if (this.hawkAttack) {
             this.hawkTimer++

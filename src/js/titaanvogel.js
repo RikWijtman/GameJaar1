@@ -8,4 +8,5 @@ export class TitaanVogel extends Pidgeon {
     hp = 160
     vliegduif = false
     image = Resources.Titaan.toSprite()
+    titan = true
 } 

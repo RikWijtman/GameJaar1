@@ -116,7 +116,7 @@ export class Battlefield extends Scene {
         });
         this.add(this.waveLabel)
 
-        this.Wave1()
+        this.Wave15()
         this.placeAreas()
     }
 

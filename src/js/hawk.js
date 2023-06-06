@@ -4,5 +4,5 @@ import {Resources} from "./resources.js"
 import { Bullet } from "./kugel"
 
 export class Hawk extends Bullet {
-    res = Resources.Bullet
+    res = Resources.Hawk
 }

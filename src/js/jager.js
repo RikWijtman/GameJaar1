@@ -21,7 +21,7 @@ export class Jager extends Towerparent {
     abilityButton
 
     levelUp2(engine) {
-        this.upgradeCost = 2600
+        this.upgradeCost = 1600
         this.camoDetection = true
 
         this.range = 450

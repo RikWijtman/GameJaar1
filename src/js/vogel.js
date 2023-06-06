@@ -15,6 +15,7 @@ export class Pidgeon extends Actor {
     vliegduif = false
     image = Resources.Pidgeon.toSprite()
     originalImage = Resources.Pidgeon.toSprite()
+    titan = false
 
     constructor(game) {
         super({width:Resources.Pidgeon.width/1.6, height:Resources.Pidgeon.height/3})
@@ -43,14 +44,20 @@ export class Pidgeon extends Actor {
             if (this.camo && !event.other.camo) {
                 return
             }
-            this.hp -= event.other.damage
+            if (this.titan) {
+                this.hp -= event.other.titanDamage
+                this.game.gainCash(event.other.titanDamage)
+            }else{
+                this.hp -= event.other.damage
+                this.game.gainCash(event.other.damage)
+            }
             this.Flash()
             event.other.bulletHp--
-            this.game.gainCash(event.other.damage)
         }})
     }
 
     onPreUpdate(){
+        console.log(this.hp)
         if (this.vliegduif && this.hp <= this.maxHp/2) {
             this.image = this.originalImage
             this.graphics.use(this.image)
