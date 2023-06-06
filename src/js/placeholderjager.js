@@ -38,7 +38,7 @@ export class Placeholder2 extends Actor {
         this.on('pointerdown', (event) => {
             if (!this.touchGrass) {
                 this.kill()
-                const tower = new Jager(this.pos.x, this.pos.y)
+                const tower = new Jager(this.pos.x, this.pos.y, this.game)
                 engine.currentScene.add(tower)
 
                 this.game.cancelplacing()

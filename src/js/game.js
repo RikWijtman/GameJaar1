@@ -6,8 +6,10 @@ import { Endscreen } from "./endscreen"
 
 export class Game extends Engine {
     constructor() {
-        super({ width: 576, height: 676 }) 
+        super({ width: 776, height: 676 }) 
         this.start(ResourceLoader).then(() => this.startGame())
+        //this.showDebug(true)
+        //this.debug.transform.showAll = true
     }
     startGame() {  
         this.addScene('battlefield', new Battlefield())  
@@ -22,9 +24,9 @@ new Game()
 /*
 todo:
 targetten fixen
-upgrades
-
-verbeteren buy art
+upgrades en sellen
+rounds fixen
+menus fixen
 
 muziek?
 

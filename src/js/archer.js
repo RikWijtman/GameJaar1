@@ -11,4 +11,22 @@ export class Archer extends Towerparent {
     firingSpeed = 800
     damage = 1
     tower = Resources.Archer
+    bulletPierce = 3
+    name = 'Archer'
+    upgradeCost = 1400
+    sellWorth = 300
+
+    levelUp2() {
+        this.upgradeCost = 2600
+        this.bulletPierce = Infinity
+        this.damage = 2
+
+        this.sellWorth = 650
+    }
+
+    levelUp3() {
+        this.splitfire = true
+
+        this.sellWorth = 1300
+    }
 } 

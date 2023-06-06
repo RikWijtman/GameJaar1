@@ -12,4 +12,5 @@ export class Sniper extends Towerparent {
     damage = 3
     tower = Resources.Sniper
     camoDetection = true
+    name = 'Sniper'
 } 

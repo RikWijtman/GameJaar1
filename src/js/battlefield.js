@@ -15,18 +15,22 @@ import { Buy3 } from './buy3'
 import { Buy4 } from './buy4'
 import { Money } from './money'
 import { Area } from './areaDenied'
+import { Range } from './range'
 import { AreaHigh } from './areaHigh'
 import { Hp } from './hp'
 import { Placeholder } from './placeholderpistoolman.js'
 import { Placeholder2 } from './placeholderjager.js'
 import { Placeholder3 } from './placeholdersniper.js'
+import { Placeholder4 } from './placeholderarcher.js'
+import { upButton } from './upButton.js'
+import { delButton } from './delButton.js'
 
 export class Battlefield extends Scene {
 
     tower
     pidgeon
     cashLabel
-    roekoes = 3000
+    roekoes = 10000
     waveTimer = 0
     waveTime = 0
     currentWave = 0
@@ -35,12 +39,22 @@ export class Battlefield extends Scene {
     baseHp = 100
     placeTower
     game
+    waveChecker
+    tagName
+    tagDamage
+    tagSpeed
+    tagRange
+    tagPrice
+    tagExists = false
+    upgButton
+    deleButton
+    sellCount
+    pointertarget
+    upgradeTimer = 0
 
     constructor(game) {
         super()
         this.game = game
-        //this.showDebug(true)
-        //this.debug.transform.showAll = true
     }
 
     onInitialize() {
@@ -60,6 +74,16 @@ export class Battlefield extends Scene {
         this.add(money)
         const hp = new Hp()
         this.add(hp)
+        
+        this.waveChecker = new Range(256,256,512)
+        this.waveChecker.on('precollision', (event) => {
+            if (event.other instanceof Pidgeon) {
+                //console.log('pipi');
+                return
+            }
+            //console.log('kaas');
+        })
+        this.add(this.waveChecker)
 
         this.cashLabel = new ex.Label({
             text: 'cash',
@@ -92,11 +116,12 @@ export class Battlefield extends Scene {
         });
         this.add(this.waveLabel)
 
-        this.Wave15()
+        this.Wave1()
         this.placeAreas()
     }
 
     onPostUpdate() {
+        this.upgradeTimer++
         if (this.baseHp <= 0) {
             console.log('you lost');
         }
@@ -371,6 +396,130 @@ export class Battlefield extends Scene {
     }
     cancelplacing() {
         this.placeTower = false
+    }
+    upgradeHandler(name,dam,spd,range,cost,char,sellW) {
+        this.pointerTarget = char
+        if (!this.tagExists) {
+            this.tagName = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 100),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagName)
+
+            this.tagDamage = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 130),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagDamage)
+
+            this.tagSpeed = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 160),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagSpeed)
+
+            this.tagRange = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 190),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagRange)
+
+            this.tagCost = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 290),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagCost)
+
+            this.upgButton = new upButton(670,330)
+            this.add(this.upgButton)
+
+            this.deleButton = new delButton(670,400)
+            this.add(this.deleButton)
+
+            this.tagSell = new ex.Label({
+                text: 'Pistoolman',
+                pos: ex.vec(600, 450),
+                font: new ex.Font({
+                    size: 24,
+                    unit: ex.FontUnit.Px,
+                    textAlign: TextAlign.Left
+                })
+            })
+            this.add(this.tagSell)
+
+            this.tagExists = true
+        }
+
+        this.setText(name,dam,range,spd,cost,sellW)
+    }
+    setText(name,dam,range,spd,cost,sellC) {
+        this.cost = cost
+        this.tagName.text = name + ''
+        this.tagDamage.text = dam + ' damage'
+        this.tagSpeed.text = Math.round(spd * 10, 2) / 10 + ' attackspeed'
+        this.tagRange.text = range + ' range'
+        this.tagCost.text = cost + ' roekoes'
+        this.tagSell.text = sellC + ' roekoes'
+        if (this.pointerTarget.level > 2) {
+            this.tagCost.text = 'max upgraded'
+        }
+        
+        this.deleButton.on('pointerdown', (event) => {
+            this.pointerTarget.kill()
+            this.pointerTarget.myRange.kill()
+            this.pointerTarget.myArea.kill()
+
+            this.roekoes += sellC
+
+            this.tagName.kill()
+            this.tagDamage.kill()
+            this.tagSpeed.kill()
+            this.tagRange.kill()
+            this.tagCost.kill()
+            this.upgButton.kill()
+            this.deleButton.kill()
+            this.tagSell.kill()
+
+            this.tagExists = false
+        })
+        this.upgButton.on('pointerdown', (event) => {
+            if (this.pointerTarget.level < 3 && this.roekoes >= cost && this.upgradeTimer > 2) {
+                this.pointerTarget.level += 1
+                this.pointerTarget.levelUp()
+                this.upgradeBuyHandler()
+                this.upgradeTimer = 0
+
+                this.pointerTarget.upgradeHandler()
+            }
+        })
+    }
+    upgradeBuyHandler() {
+        this.roekoes -= this.cost
     }
 
     Wave1() {

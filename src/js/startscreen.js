@@ -2,6 +2,7 @@ import '../css/style.css'
 import * as ex from 'excalibur'
 import { Actor, Engine, Vector, TextAlign, Scene } from "excalibur"
 import { Startbutton } from './startbutton'
+import { Logo } from './logo'
 
 export class Startscreen extends Scene {
 

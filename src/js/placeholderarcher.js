@@ -38,7 +38,7 @@ export class Placeholder4 extends Actor {
         this.on('pointerdown', (event) => {
             if (!this.touchGrass) {
                 this.kill()
-                const tower = new Archer(this.pos.x, this.pos.y)
+                const tower = new Archer(this.pos.x, this.pos.y, this.game)
                 engine.currentScene.add(tower)
 
                 this.game.cancelplacing()
@@ -50,7 +50,7 @@ export class Placeholder4 extends Actor {
     onPreUpdate(engine) {        
         this.pos = engine.input.pointers.primary.lastScreenPos
 
-        this.graphics.use(Resources.Archer.toSprite())
+        this.graphics.use(Resources.ArcherA.toSprite())
 
         if (engine.input.keyboard.isHeld(Input.Keys.X)) {
             this.kill()

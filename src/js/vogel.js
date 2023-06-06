@@ -45,7 +45,7 @@ export class Pidgeon extends Actor {
             }
             this.hp -= event.other.damage
             this.Flash()
-            event.other.kill()
+            event.other.bulletHp--
             this.game.gainCash(event.other.damage)
         }})
     }

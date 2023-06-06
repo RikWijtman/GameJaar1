@@ -15,6 +15,7 @@ import BuySniperImage from '../images/BuySniper.png'
 import SniperImageA from '../images/SniperA.png'
 import JagerImageA from '../images/JagerA.png'
 import TowerImageA from '../images/PistoolmanA.png'
+import ArcherImageA from '../images/ArcherA.png'
 import HpImage from '../images/Hp.png'
 import BlokImage from '../images/Blok.png'
 import BlokVliegImage from '../images/Blokvlieg.png'
@@ -45,6 +46,7 @@ const Resources = {
     BuySniper: new ImageSource(BuySniperImage),
     SniperA: new ImageSource(SniperImageA),
     JagerA: new ImageSource(JagerImageA),
+    ArcherA: new ImageSource(ArcherImageA),
     PistoolmanA: new ImageSource(TowerImageA),
     Hp: new ImageSource(HpImage),
     PidgeonVlieg: new ImageSource(pidgeonVliegImage),
@@ -63,6 +65,37 @@ const Resources = {
     BuyArcher: new ImageSource(BuyArcherImage),
 
 }
-const ResourceLoader = new Loader([Resources.Pidgeon, Resources.Tower, Resources.Bullet, Resources.Background, Resources.BuyPistoolman, Resources.Range, Resources.Money, Resources.Area, Resources.Jager, Resources.BuyJager, Resources.BuySniper, Resources.Sniper, Resources.JagerA, Resources.SniperA, Resources.PistoolmanA, Resources.Hp, Resources.PidgeonVlieg, Resources.Blok, Resources.BlokVlieg, Resources.Bos, Resources.BosVlieg, Resources.BosBlokVlieg, Resources.BosBlok, Resources.Titaan, Resources.Play, Resources.LoseScreen, Resources.WinScreen, Resources.Logo, Resources.Archer, Resources.BuyArcher])
+const ResourceLoader = new Loader([Resources.Pidgeon, 
+    Resources.Tower, 
+    Resources.Bullet, 
+    Resources.Background, 
+    Resources.BuyPistoolman, 
+    Resources.Range, 
+    Resources.Money, 
+    Resources.Area, 
+    Resources.Jager, 
+    Resources.BuyJager, 
+    Resources.BuySniper, 
+    Resources.Sniper, 
+    Resources.JagerA, 
+    Resources.SniperA, 
+    Resources.ArcherA, 
+    Resources.PistoolmanA, 
+    Resources.Hp, 
+    Resources.PidgeonVlieg, 
+    Resources.Blok, 
+    Resources.BlokVlieg, 
+    Resources.Bos, 
+    Resources.BosVlieg, 
+    Resources.BosBlokVlieg, 
+    Resources.BosBlok, 
+    Resources.Titaan, 
+    Resources.Play, 
+    Resources.LoseScreen, 
+    Resources.WinScreen, 
+    Resources.Logo, 
+    Resources.Archer, 
+    Resources.BuyArcher
+])
 
 export { Resources, ResourceLoader }
